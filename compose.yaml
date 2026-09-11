@@ -1,0 +1,15 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: docker/server.Dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+      - api-tmp:/tmp/pdfforge
+    environment:
+      PDFFORGE_TMP: /tmp/pdfforge
+    restart: unless-stopped
+
+volumes:
+  api-tmp:

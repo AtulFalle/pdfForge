@@ -1,0 +1,21 @@
+---
+description: PDFForge delivery gates and repo conventions
+alwaysApply: true
+---
+
+# PDFForge
+
+Ship in gated phases. Do not start Phase 2 or 3 until the user confirms the current phase.
+
+- Phase 1: folders, Docker, CI, `GET /health` only
+- Phase 2: Axum OpenAPI, PDF engine, sanity tests — no Angular
+- Phase 3: Angular 21 editor
+
+Do not use Nx. Do not add a database. Do not send PDFs to external services.
+
+Canonical skills:
+
+- `skills/rust-pdf-engine/SKILL.md`
+- `skills/angular-editor/SKILL.md`
+
+Forbidden for text editing: white rectangle plus overlay text. Edit content streams instead.

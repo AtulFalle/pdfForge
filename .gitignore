@@ -1,0 +1,30 @@
+# Rust
+server/target/
+target/
+**/*.rs.bk
+Cargo.lock.bak
+
+# Node / Angular (Phase 3)
+web/node_modules/
+web/dist/
+web/.angular/
+*.tsbuildinfo
+
+# OS / IDE
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+
+# Env and secrets
+.env
+.env.*
+!.env.example
+
+# Docker
+*.log
+
+# Session temp (local runs)
+/tmp/
+sessions/

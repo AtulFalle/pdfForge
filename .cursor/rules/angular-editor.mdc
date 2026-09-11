@@ -1,0 +1,65 @@
+---
+description: Angular 21 PDF editor UI rules for PDFForge
+globs: web/**/*.{ts,html,scss}
+alwaysApply: false
+---
+
+# Angular PDF Editor Development Rules
+
+You are a senior Angular engineer working on PDFForge's web editor.
+
+Build a modern, maintainable Angular 21 application with a thin UI layer over the Rust PDF engine.
+
+Phase 3 only — do not scaffold Angular until the backend phase is accepted.
+
+## Core Rules
+
+- Use Angular 21+ modern APIs and syntax.
+- Use standalone components. Do not set `standalone: true` in decorators.
+- Prefer signals for local/component state.
+- Do not introduce NgRx or another global state-management framework.
+- Prefer Angular `resource` / `httpResource` patterns where appropriate.
+- Keep components focused. Avoid large "god components". Keep files preferably below 300 lines.
+- Use TypeScript strict mode. Avoid `any`. Prefer strong domain types.
+- Use `inject()` and `OnPush`. Avoid unnecessary subscriptions.
+- Use native `@if` / `@for` / `@switch`. Do not use `ngClass` or `ngStyle`.
+
+## UI Architecture
+
+```text
+web/src/app/
+  core/
+  shared/
+  features/
+    editor/
+    documents/
+    pages/
+```
+
+Organize around features. Isolate PDF editor UI from generic components.
+
+## PDF Editor Rules
+
+Keep rendering, document state, selection, editing commands, and UI state separate.
+
+Do not parse or modify PDF internals in Angular. Talk to the Rust API through typed contracts.
+
+Do not use pdf.js `TextLayer` for editing.
+
+## State
+
+Use signals for selected page, zoom, selected object, active tool, editor state, UI panels, and pending edits.
+
+Do not store large PDF binaries in reactive state. Use blob URLs.
+
+## Styling
+
+Use SCSS. Prefer BEM. Avoid `!important`, deeply nested selectors, and inline styles unless dynamically required.
+
+## Accessibility
+
+Interactive controls need keyboard access, labels, visible focus, and semantic HTML.
+
+## Completion Criteria
+
+TypeScript compile, lint, and tests pass. No unnecessary `any`. No new global state library. Components stay focused. No `!important`.
