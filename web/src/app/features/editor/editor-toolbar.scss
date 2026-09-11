@@ -1,0 +1,31 @@
+:host {
+  display: block;
+  border-bottom: var(--el-border-width) solid var(--el-color-outline-variant);
+  background: var(--el-color-surface);
+}
+
+.editor-toolbar {
+  display: grid;
+  grid-template-columns: minmax(9rem, max-content) 1fr auto;
+  align-items: center;
+  gap: var(--el-space-3);
+  padding: var(--el-space-3) var(--el-space-4);
+}
+
+.editor-toolbar__title {
+  max-width: 16rem;
+  overflow: hidden;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.editor-toolbar__zoom {
+  width: 8rem;
+}
+
+.editor-toolbar__zoom-label {
+  min-width: 3rem;
+  color: var(--el-color-on-surface-variant);
+  font-size: 0.8125rem;
+}

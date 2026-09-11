@@ -1,20 +1,23 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { ElContainer } from './ui/container/container';
-import { ElEmptyState } from './ui/empty-state/empty-state';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { DocumentOpen } from './features/documents/document-open';
+import { EditorShell } from './features/editor/editor-shell';
+import { EditorStore } from './features/editor/editor-store';
+import { ElToaster } from './ui/toast/toaster';
 
 @Component({
   selector: 'app-root',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ElContainer, ElEmptyState],
+  imports: [DocumentOpen, EditorShell, ElToaster],
   styleUrl: './app.scss',
   template: `
-    <el-container size="lg">
-      <el-empty-state
-        icon="folder-open"
-        title="PDFForge"
-        description="Editor UI is not implemented yet."
-      />
-    </el-container>
+    <el-toaster />
+    @if (store.hasSession()) {
+      <app-editor-shell />
+    } @else {
+      <app-document-open />
+    }
   `,
 })
-export class App {}
+export class App {
+  protected readonly store = inject(EditorStore);
+}

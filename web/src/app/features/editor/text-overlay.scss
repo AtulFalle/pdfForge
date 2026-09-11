@@ -1,0 +1,30 @@
+:host {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.text-overlay__hit {
+  position: absolute;
+  padding: 0;
+  pointer-events: auto;
+  border: var(--el-border-width) solid color-mix(in srgb, var(--el-color-info) 55%, transparent);
+  border-radius: var(--el-radius-xs);
+  background: color-mix(in srgb, var(--el-color-info) 12%, transparent);
+  cursor: pointer;
+}
+
+.text-overlay__hit:focus-visible {
+  outline: var(--el-border-width-thick) solid var(--el-color-primary);
+  outline-offset: 2px;
+}
+
+.text-overlay__hit--search {
+  border-color: var(--el-color-warning);
+  background: color-mix(in srgb, var(--el-color-warning) 18%, transparent);
+}
+
+.text-overlay__hit--selected {
+  border-color: var(--el-color-primary);
+  background: color-mix(in srgb, var(--el-color-primary) 16%, transparent);
+}

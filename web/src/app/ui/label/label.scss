@@ -1,0 +1,30 @@
+.el-label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--el-space-1);
+  font-family: var(--el-font-sans);
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.25;
+
+  &--disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  &--default {
+    color: var(--el-color-on-surface);
+  }
+
+  &--muted {
+    color: var(--el-color-on-surface-variant);
+  }
+
+  &--error {
+    color: var(--el-color-error);
+  }
+
+  &__required {
+    color: var(--el-color-error);
+  }
+}

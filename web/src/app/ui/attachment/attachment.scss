@@ -1,0 +1,89 @@
+:host(.el-attachment-host) {
+  display: block;
+  min-width: 0;
+  height: 100%;
+}
+
+.el-attachment {
+  --el-attachment-padding: 0.5rem 0.75rem;
+  --el-attachment-gap: 0.75rem;
+  --el-attachment-media-size: 2.5rem;
+  --el-attachment-title-size: 0.875rem;
+  --el-attachment-desc-size: 0.75rem;
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  box-sizing: border-box;
+  gap: var(--el-attachment-gap);
+  width: 100%;
+  height: 100%;
+  padding: var(--el-attachment-padding);
+  border: var(--el-border-width) solid var(--el-color-outline-variant);
+  border-radius: var(--el-radius-md);
+  background: var(--el-color-surface);
+  color: var(--el-color-on-surface);
+  font-family: var(--el-font-sans);
+
+  &__body {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: row;
+    align-items: center;
+    gap: var(--el-attachment-gap);
+    min-width: 0;
+
+    &:not(:has(*)) {
+      display: none;
+    }
+  }
+
+  &--vertical {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    padding: 0;
+    overflow: hidden;
+  }
+
+  &--vertical &__body {
+    align-items: flex-start;
+    gap: var(--el-space-2);
+    padding: var(--el-attachment-padding);
+  }
+
+  &--sm {
+    --el-attachment-padding: 0.375rem 0.5rem;
+    --el-attachment-gap: 0.5rem;
+    --el-attachment-media-size: 1.75rem;
+    --el-attachment-title-size: 0.8125rem;
+    --el-attachment-desc-size: 0.6875rem;
+  }
+
+  &--md {
+    --el-attachment-padding: 0.5rem 0.75rem;
+    --el-attachment-gap: 0.75rem;
+    --el-attachment-media-size: 2.5rem;
+    --el-attachment-title-size: 0.875rem;
+    --el-attachment-desc-size: 0.75rem;
+  }
+
+  &--lg {
+    --el-attachment-padding: 0.75rem 1rem;
+    --el-attachment-gap: 1rem;
+    --el-attachment-media-size: 3rem;
+    --el-attachment-title-size: 1rem;
+    --el-attachment-desc-size: 0.8125rem;
+  }
+
+  &--error {
+    border-color: color-mix(in srgb, var(--el-color-error) 40%, var(--el-color-outline-variant));
+    background: var(--el-color-error-container);
+    color: var(--el-color-error);
+  }
+
+  &--uploading,
+  &--processing {
+    border-color: var(--el-color-outline-variant);
+  }
+}

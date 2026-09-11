@@ -1,0 +1,48 @@
+<button
+  class="el-button"
+  [class.el-button--primary]="variant() === 'primary'"
+  [class.el-button--secondary]="variant() === 'secondary'"
+  [class.el-button--ghost]="variant() === 'ghost'"
+  [class.el-button--icon]="variant() === 'icon'"
+  [class.el-button--sm]="size() === 'sm'"
+  [class.el-button--md]="size() === 'md'"
+  [class.el-button--lg]="size() === 'lg'"
+  [class.el-button--with-icon-start]="iconStart()"
+  [class.el-button--with-icon-end]="iconEnd()"
+  [class.el-button--loading]="loading()"
+  [disabled]="isDisabled()"
+  [type]="type()"
+  [attr.aria-label]="ariaLabel() || null"
+  [attr.aria-busy]="loading() ? 'true' : null"
+>
+  @if (loading()) {
+    <el-icon
+      class="el-button__icon"
+      name="spinner"
+      [variant]="iconVariant()"
+      [size]="iconSize()"
+    />
+  } @else if (iconStart()) {
+    <el-icon
+      class="el-button__icon"
+      [name]="iconStart()"
+      [variant]="iconVariant()"
+      [size]="iconSize()"
+    />
+  }
+  <span class="el-button__label">
+    @if (loading() && !isIconOnly()) {
+      {{ loadingLabel() }}
+    } @else {
+      <ng-content />
+    }
+  </span>
+  @if (!loading() && iconEnd()) {
+    <el-icon
+      class="el-button__icon"
+      [name]="iconEnd()"
+      [variant]="iconVariant()"
+      [size]="iconSize()"
+    />
+  }
+</button>

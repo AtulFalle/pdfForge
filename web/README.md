@@ -1,25 +1,34 @@
 # web/
 
-Angular 22 editor app. Phase 1 is folder setup, CI, Docker, and an API proxy — no editor features.
+Angular 22 PDF editor. It talks to the Rust session API and uses NgElemental widgets in `src/app/ui/`.
 
-UI widgets come from [NgElemental](https://www.npmjs.com/package/@ng-elemental/cli) source copies in `src/app/ui/`. Do not add custom layout HTML; compose `El*` components.
+PDF pages render with pdf.js. Text selection and edits use the engine analysis overlay — not a pdf.js text layer and not white-box overlays.
 
 ## Layout
 
 ```text
 src/app/
-  core/                 # reserved
-  shared/               # reserved
+  core/                 # typed session API, pdf.js renderer
   features/
-    editor/             # reserved
-    documents/          # reserved
-    pages/              # reserved
+    editor/             # viewer, toolbar, text properties
+    documents/          # open / upload
+    pages/              # thumbnails and page actions
   ui/                   # NgElemental copies
 ```
 
+## Features
+
+- Open a PDF (`POST /api/sessions`)
+- Select, edit, add, and delete text runs
+- Search extracted text
+- Rotate, reorder, delete, merge, and split pages
+- Undo / redo and export
+
+Mutations send `X-Document-Revision`. A stale value returns **409**.
+
 ## Run locally
 
-Needs Node.js 24+ and the API on `127.0.0.1:3000` if you want the proxy.
+Needs Node.js 24+ and the API on `127.0.0.1:3000`.
 
 ```bash
 cd web

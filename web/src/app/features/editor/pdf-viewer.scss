@@ -1,0 +1,27 @@
+:host {
+  display: block;
+  height: 100%;
+  min-height: 0;
+  background: var(--el-color-surface-container-low);
+}
+
+.pdf-viewer__scroll {
+  height: 100%;
+  box-sizing: border-box;
+  padding: var(--el-space-4);
+}
+
+.pdf-viewer__page {
+  position: relative;
+  margin-inline: auto;
+  background: var(--el-color-surface);
+  box-shadow: var(--el-shadow-2);
+}
+
+.pdf-viewer__page--add {
+  cursor: crosshair;
+}
+
+.pdf-viewer__canvas {
+  display: block;
+}

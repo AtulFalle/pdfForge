@@ -1,0 +1,13 @@
+:host(.el-attachment-content-host) {
+  display: block;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.el-attachment-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.125rem;
+  min-width: 0;
+}

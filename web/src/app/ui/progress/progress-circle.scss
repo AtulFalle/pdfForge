@@ -1,0 +1,94 @@
+:host {
+  display: inline-block;
+}
+
+.el-progress-circle {
+  --el-progress-circle-size: 3.5rem;
+  --el-progress-circle-stroke: 0.25rem;
+  --el-progress-circle-label-size: 0.875rem;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--el-progress-circle-size);
+  height: var(--el-progress-circle-size);
+}
+
+.el-progress-circle__svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+
+.el-progress-circle__track,
+.el-progress-circle__fill {
+  stroke-width: var(--el-progress-circle-stroke);
+}
+
+.el-progress-circle__track {
+  stroke: var(--el-color-outline-variant);
+}
+
+.el-progress-circle__fill {
+  stroke: var(--el-color-primary);
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.2s ease;
+}
+
+.el-progress-circle--indeterminate .el-progress-circle__svg {
+  animation: el-progress-circle-rotate 1.2s linear infinite;
+}
+
+.el-progress-circle--indeterminate .el-progress-circle__fill {
+  transition: none;
+}
+
+.el-progress-circle__label {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--el-color-on-surface-variant);
+  font-family: var(--el-font-sans);
+  font-size: var(--el-progress-circle-label-size);
+  font-weight: 500;
+  line-height: 1;
+  pointer-events: none;
+  font-variant-numeric: tabular-nums;
+}
+
+.el-progress-circle--sm {
+  --el-progress-circle-size: 2.5rem;
+  --el-progress-circle-stroke: 0.2rem;
+  --el-progress-circle-label-size: 0.75rem;
+}
+
+.el-progress-circle--md {
+  --el-progress-circle-size: 3.5rem;
+  --el-progress-circle-stroke: 0.25rem;
+  --el-progress-circle-label-size: 0.875rem;
+}
+
+.el-progress-circle--lg {
+  --el-progress-circle-size: 4.5rem;
+  --el-progress-circle-stroke: 0.3125rem;
+  --el-progress-circle-label-size: 1rem;
+}
+
+@keyframes el-progress-circle-rotate {
+  to {
+    transform: rotate(270deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .el-progress-circle__fill {
+    transition: none;
+  }
+
+  .el-progress-circle--indeterminate .el-progress-circle__svg {
+    animation: none;
+  }
+}

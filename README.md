@@ -4,9 +4,9 @@ Personal, self-hosted PDF editor for homelab use. Documents stay on your machine
 
 ## Status
 
-**Phase 3 (web, folder setup):** Angular 22 app, NgElemental theme/widgets, CI, Docker, and an API proxy. No editor features yet.
+**Phase 3 (web editor):** Angular 22 app consumes the Phase 2 session API — open, render, search, edit text, page ops, undo/redo, and export. NgElemental widgets, CI, Docker, and an API proxy.
 
-The Rust API from Phase 2 remains the source of PDF work.
+The Rust API remains the source of PDF work. Text is edited in content streams, not covered with overlay boxes.
 
 ## Layout
 
@@ -44,7 +44,7 @@ pnpm start
 
 | URL | What |
 | --- | --- |
-| `http://127.0.0.1:4200/` | Angular placeholder shell |
+| `http://127.0.0.1:4200/` | Angular editor (open a PDF, then edit) |
 | `GET /health` | liveness (proxied) |
 | `GET /ready` | readiness (proxied) |
 | `http://127.0.0.1:4200/swagger-ui/` | interactive OpenAPI (proxied) |

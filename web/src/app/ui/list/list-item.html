@@ -1,0 +1,25 @@
+<li
+  [class]="rootClass()"
+  [attr.aria-disabled]="disabled() || null"
+  [attr.aria-current]="selected() ? true : null"
+  [attr.tabindex]="hostTabIndex()"
+  (click)="onHostClick($event)"
+  (keydown.enter)="onHostActivate($event)"
+  (keydown.space)="onHostActivate($event)"
+>
+  <div class="el-list-item__leading">
+    <ng-content select="[elListLeading]" />
+  </div>
+  <div class="el-list-item__body">
+    <div class="el-list-item__title">
+      <ng-content select="[elListTitle]" />
+    </div>
+    <div class="el-list-item__description">
+      <ng-content select="[elListDescription]" />
+    </div>
+    <ng-content />
+  </div>
+  <div class="el-list-item__trailing">
+    <ng-content select="[elListTrailing]" />
+  </div>
+</li>

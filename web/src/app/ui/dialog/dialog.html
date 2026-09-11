@@ -1,0 +1,40 @@
+@if (open()) {
+  <dialog
+    #panel
+    class="el-dialog"
+    [class.el-dialog--sm]="size() === 'sm'"
+    [class.el-dialog--md]="size() === 'md'"
+    [class.el-dialog--lg]="size() === 'lg'"
+    [id]="'el-dialog-panel-' + titleId"
+    [attr.aria-labelledby]="labelledBy()"
+    [attr.aria-label]="ariaLabel() || null"
+    [attr.aria-describedby]="ariaDescribedBy() || null"
+    (cancel)="onCancel($event)"
+    (close)="onNativeClose()"
+  >
+    <div class="el-dialog__header">
+      <h2 class="el-dialog__title" [id]="titleId">
+        <ng-content select="[elDialogHeader]" />
+        @if (title()) {
+          <span class="el-dialog__title-text">{{ title() }}</span>
+        }
+      </h2>
+      @if (closable()) {
+        <button
+          type="button"
+          class="el-dialog__close"
+          aria-label="Close"
+          (click)="close()"
+        >
+          <el-icon name="xmark" size="sm" />
+        </button>
+      }
+    </div>
+    <div class="el-dialog__content" tabindex="0">
+      <ng-content select="[elDialogContent]" />
+    </div>
+    <div class="el-dialog__footer">
+      <ng-content select="[elDialogFooter]" />
+    </div>
+  </dialog>
+}

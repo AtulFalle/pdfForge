@@ -37,6 +37,11 @@
                 "glob": "**/*",
                 "input": "node_modules/@fortawesome/fontawesome-free/webfonts",
                 "output": "vendor/fontawesome/webfonts"
+              },
+              {
+                "glob": "pdf.worker.min.mjs",
+                "input": "node_modules/pdfjs-dist/build",
+                "output": "pdfjs"
               }
             ],
             "styles": [
@@ -48,8 +53,8 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "500kB",
-                  "maximumError": "1MB"
+                  "maximumWarning": "1.5MB",
+                  "maximumError": "3MB"
                 },
                 {
                   "type": "anyComponentStyle",
