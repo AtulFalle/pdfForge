@@ -6,12 +6,14 @@
       "root": "web/",
       "installCommand": "pnpm install --frozen-lockfile",
       "buildCommand": "pnpm run build",
-      "outputDirectory": "dist/web/browser"
+      "outputDirectory": "dist/web/browser",
+      "ignoreCommand": "bash \"$(git rev-parse --show-toplevel)/scripts/vercel-ignore.sh\""
     },
     "api": {
       "runtime": "container",
       "root": "server/",
-      "entrypoint": "Dockerfile.vercel"
+      "entrypoint": "Dockerfile.vercel",
+      "ignoreCommand": "bash \"$(git rev-parse --show-toplevel)/scripts/vercel-ignore.sh\""
     }
   },
   "rewrites": [

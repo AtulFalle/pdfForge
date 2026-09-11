@@ -65,6 +65,10 @@ cargo run -- replace path/to/file.pdf --run-id 1-0 --text "New text" -o out.pdf
 
 The Angular UI and Rust API deploy as one Vercel project (`vercel.json`). `/api`, `/health`, `/ready`, `/swagger-ui`, and `/api-docs` go to the Axum container; everything else is the static editor.
 
+- Push to `master` → production
+- Pull requests → preview (Vercel comments the URL on the PR)
+- Other branch pushes without a PR are skipped
+
 Session PDFs live on that container's disk. Vercel scales the API to zero after idle time, so open documents do not survive a cold start. Homelab Compose is still the durable self-hosted option.
 
 ## Homelab deploy (CD)
@@ -88,13 +92,15 @@ docker compose down
 
 ## CI
 
-GitHub Actions runs on push and pull requests:
+GitHub Actions runs on pull requests and on pushes to `master`:
 
 - `cargo fmt --check`
 - `cargo clippy --all-targets --all-features -- -D warnings`
 - `cargo test`
 - `pnpm test` and `pnpm run build` in `web/`
 - `docker compose build`
+
+Deploys are not done from GitHub Actions. The Vercel GitHub app ships production from `master` and previews from PRs.
 
 ## Agent skills
 
