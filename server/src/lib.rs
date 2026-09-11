@@ -1,15 +1,5 @@
-use axum::{routing::get, Json, Router};
-use serde::Serialize;
+mod api;
+pub mod pdf;
+mod sessions;
 
-#[derive(Debug, Serialize)]
-pub struct HealthResponse {
-    pub status: &'static str,
-}
-
-pub fn app() -> Router {
-    Router::new().route("/health", get(health))
-}
-
-async fn health() -> Json<HealthResponse> {
-    Json(HealthResponse { status: "ok" })
-}
+pub use api::{app, app_with_state, AppState};

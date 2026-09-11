@@ -1,12 +1,87 @@
 use std::net::SocketAddr;
+use std::path::PathBuf;
 
-use pdfforge::app;
+use clap::{Parser, Subcommand};
+use pdfforge::pdf::{analyze, load_pdf, replace_run, save_pdf};
+use pdfforge::{app_with_state, AppState};
+
+#[derive(Parser)]
+#[command(name = "pdfforge", about = "Self-hosted PDF editor API")]
+struct Cli {
+    #[command(subcommand)]
+    command: Option<Command>,
+}
+
+#[derive(Subcommand)]
+enum Command {
+    /// Serve the HTTP API
+    Serve {
+        #[arg(long, default_value = "0.0.0.0:3000")]
+        bind: String,
+    },
+    /// Print text-run analysis as JSON
+    Analyze { path: PathBuf },
+    /// Replace a text run and write a new PDF
+    Replace {
+        path: PathBuf,
+        #[arg(long)]
+        run_id: String,
+        #[arg(long)]
+        text: String,
+        #[arg(short, long)]
+        output: PathBuf,
+    },
+}
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let addr = SocketAddr::from(([0, 0, 0, 0], 3000));
+    let command = Cli::parse().command.unwrap_or(Command::Serve {
+        bind: "0.0.0.0:3000".to_string(),
+    });
+    match command {
+        Command::Serve { bind } => serve(&bind).await,
+        Command::Analyze { path } => analyze_file(&path),
+        Command::Replace {
+            path,
+            run_id,
+            text,
+            output,
+        } => replace_file(&path, &run_id, &text, &output),
+    }
+}
+
+async fn serve(bind: &str) -> Result<(), Box<dyn std::error::Error>> {
+    let state = AppState::from_env()?;
+    let addr: SocketAddr = bind.parse()?;
     let listener = tokio::net::TcpListener::bind(addr).await?;
     println!("pdfforge listening on {addr}");
-    axum::serve(listener, app()).await?;
+    println!("swagger ui: http://{addr}/swagger-ui/");
+    axum::serve(listener, app_with_state(state)).await?;
+    Ok(())
+}
+
+fn analyze_file(path: &PathBuf) -> Result<(), Box<dyn std::error::Error>> {
+    let bytes = std::fs::read(path)?;
+    let document = load_pdf(&bytes)?;
+    let analysis = analyze(&document, 1)?;
+    println!("{}", serde_json::to_string_pretty(&analysis)?);
+    Ok(())
+}
+
+fn replace_file(
+    path: &PathBuf,
+    run_id: &str,
+    text: &str,
+    output: &PathBuf,
+) -> Result<(), Box<dyn std::error::Error>> {
+    let bytes = std::fs::read(path)?;
+    let mut document = load_pdf(&bytes)?;
+    let result = replace_run(&mut document, run_id, text)?;
+    std::fs::write(output, save_pdf(&mut document)?)?;
+    println!(
+        "wrote {} (font_fallback={})",
+        output.display(),
+        result.font_fallback
+    );
     Ok(())
 }
