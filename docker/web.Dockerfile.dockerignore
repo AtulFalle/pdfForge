@@ -3,11 +3,10 @@
 .cursor
 docs
 skills
-**/target
-**/*.md
-.env
-.env.*
-*.md
+server
 web/node_modules
 web/dist
 web/.angular
+**/*.md
+.env
+.env.*

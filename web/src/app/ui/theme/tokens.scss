@@ -1,0 +1,169 @@
+// NgElemental design tokens — semantic color roles + density + typography.
+// Defaults match shadcn/ui slate colors and Inter type scale (Figma kit).
+// Copied by `npx @ng-elemental/cli init` (or `add theme`), then @use tokens
+// and typography once in styles.scss. Load the Inter font face in the app.
+//
+// Customization:
+//   1. Edit the BRAND section. Changing --el-color-primary updates buttons,
+//      chips, checkboxes, sliders, and other widgets.
+//   2. Dark mode: provideElTheme({ mode: 'dark' }) / setMode('dark') sets
+//      color-scheme and data-el-theme so light-dark() flips.
+//   3. Override tokens on a wrapper for scoped styling.
+//   `add theme --force` overwrites this file — back up brand edits first.
+//
+// Do not add widget aliases (--el-button-*, --el-chip-*). Unique sizes stay
+// in that widget's SCSS and copy only with that component.
+
+:root {
+  color-scheme: light;
+
+  // ── BRAND — edit these (shadcn slate defaults) ───────────────────────────
+  // Tailwind slate / red aliases from the shadcn Figma kit.
+  --el-color-primary: light-dark(#0f172a, #f8fafc);
+  --el-color-on-primary: light-dark(#f8fafc, #0f172a);
+  --el-color-primary-container: light-dark(#f1f5f9, #1e293b);
+  --el-color-on-primary-container: light-dark(#0f172a, #f8fafc);
+
+  --el-color-secondary: light-dark(#f1f5f9, #1e293b);
+  --el-color-on-secondary: light-dark(#0f172a, #f8fafc);
+  --el-color-secondary-container: light-dark(#f1f5f9, #1e293b);
+  --el-color-on-secondary-container: light-dark(#0f172a, #f8fafc);
+
+  --el-color-tertiary: light-dark(#f1f5f9, #1e293b);
+  --el-color-on-tertiary: light-dark(#0f172a, #f8fafc);
+  --el-color-tertiary-container: light-dark(#e2e8f0, #334155);
+  --el-color-on-tertiary-container: light-dark(#0f172a, #f8fafc);
+
+  --el-color-error: light-dark(#ef4444, #7f1d1d);
+  --el-color-on-error: light-dark(#ffffff, #f8fafc);
+  --el-color-error-container: light-dark(#fee2e2, #7f1d1d);
+  --el-color-on-error-container: light-dark(#7f1d1d, #fee2e2);
+
+  --el-color-success: light-dark(#15803d, #4ade80);
+  --el-color-on-success: light-dark(#ffffff, #052e16);
+  --el-color-success-container: light-dark(#dcfce7, #14532d);
+  --el-color-on-success-container: light-dark(#14532d, #dcfce7);
+
+  --el-color-warning: light-dark(#b45309, #fbbf24);
+  --el-color-on-warning: light-dark(#ffffff, #451a03);
+  --el-color-warning-container: light-dark(#fef3c7, #78350f);
+  --el-color-on-warning-container: light-dark(#78350f, #fef3c7);
+
+  --el-color-info: light-dark(#1d4ed8, #60a5fa);
+  --el-color-on-info: light-dark(#ffffff, #172554);
+  --el-color-info-container: light-dark(#dbeafe, #1e3a8a);
+  --el-color-on-info-container: light-dark(#1e3a8a, #dbeafe);
+
+  --el-color-surface: light-dark(#ffffff, #000000);
+  --el-color-on-surface: light-dark(#000000, #ffffff);
+  --el-color-on-surface-variant: light-dark(#64748b, #94a3b8);
+  --el-color-surface-container: light-dark(#f1f5f9, #0f172a);
+  --el-color-surface-container-low: light-dark(#f8fafc, #020617);
+  --el-color-surface-container-high: light-dark(#e2e8f0, #1e293b);
+  --el-color-surface-container-highest: light-dark(#cbd5e1, #334155);
+
+  --el-color-outline: light-dark(#94a3b8, #64748b);
+  --el-color-outline-variant: light-dark(#e2e8f0, #334155);
+
+  --el-color-inverse-surface: light-dark(#0f172a, #f8fafc);
+  --el-color-inverse-on-surface: light-dark(#f8fafc, #0f172a);
+  --el-color-inverse-primary: light-dark(#f8fafc, #0f172a);
+
+  // ── Derived ──────────────────────────────────────────────────────────────
+  --el-color-primary-hover: light-dark(#1e293b, #f1f5f9);
+  --el-color-hover: color-mix(in srgb, var(--el-color-on-surface) 8%, transparent);
+  --el-color-focus: color-mix(in srgb, var(--el-color-primary) 12%, transparent);
+  --el-color-disabled: color-mix(in srgb, var(--el-color-on-surface) 38%, transparent);
+  --el-color-disabled-container: color-mix(in srgb, var(--el-color-on-surface) 12%, transparent);
+  --el-color-disabled-container-subtle: color-mix(
+    in srgb,
+    var(--el-color-on-surface) 4%,
+    transparent
+  );
+
+  // ── Density ──────────────────────────────────────────────────────────────
+  --el-space-1: 0.25rem;
+  --el-space-2: 0.5rem;
+  --el-space-3: 0.75rem;
+  --el-space-4: 1rem;
+  --el-space-5: 1.25rem;
+  --el-space-6: 1.5rem;
+  --el-space-8: 2rem;
+
+  --el-radius-xs: 0.375rem;
+  --el-radius-sm: 0.5rem;
+  --el-radius-md: 0.75rem;
+  --el-radius-lg: 1rem;
+  --el-radius-full: 999px;
+
+  --el-shadow-color: light-dark(rgb(0 0 0 / 0.08), rgb(0 0 0 / 0.28));
+  --el-shadow-1: 0 1px 2px var(--el-shadow-color), 0 4px 12px var(--el-shadow-color);
+  --el-shadow-2:
+    0 1px 1px var(--el-shadow-color),
+    0 2px 2px var(--el-shadow-color),
+    0 4px 4px var(--el-shadow-color);
+  --el-shadow-3: 0 4px 6px var(--el-shadow-color), 0 8px 24px var(--el-shadow-color);
+
+  --el-border-width: 1px;
+  --el-border-width-thick: 2px;
+
+  --el-icon-size-sm: 0.875rem;
+  --el-icon-size-md: 1.125rem;
+  --el-icon-size-lg: 1.25rem;
+
+  // ── Typography — shadcn / Inter scale (Figma Typography page) ─────────────
+  // Load Inter in the app (Google Fonts, @fontsource/inter, or self-hosted).
+  --el-font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --el-font-mono: ui-monospace, 'Cascadia Code', 'Segoe UI Mono', Menlo, Consolas, monospace;
+
+  --el-text-h1-size: 3rem;
+  --el-text-h1-weight: 800;
+  --el-text-h1-line-height: 1;
+  --el-text-h1-tracking: -0.025em;
+
+  --el-text-h2-size: 1.875rem;
+  --el-text-h2-weight: 600;
+  --el-text-h2-line-height: 1.2;
+  --el-text-h2-tracking: -0.025em;
+
+  --el-text-h3-size: 1.5rem;
+  --el-text-h3-weight: 600;
+  --el-text-h3-line-height: 1.333;
+  --el-text-h3-tracking: -0.025em;
+
+  --el-text-h4-size: 1.25rem;
+  --el-text-h4-weight: 600;
+  --el-text-h4-line-height: 1.4;
+  --el-text-h4-tracking: -0.025em;
+
+  --el-text-p-size: 1rem;
+  --el-text-p-weight: 400;
+  --el-text-p-line-height: 1.75;
+
+  --el-text-lead-size: 1.25rem;
+  --el-text-lead-weight: 400;
+  --el-text-lead-line-height: 1.4;
+
+  --el-text-large-size: 1.125rem;
+  --el-text-large-weight: 600;
+  --el-text-large-line-height: 1.556;
+
+  --el-text-small-size: 0.875rem;
+  --el-text-small-weight: 500;
+  --el-text-small-line-height: 1;
+
+  --el-text-muted-size: 0.875rem;
+  --el-text-muted-weight: 400;
+  --el-text-muted-line-height: 1.429;
+
+  --el-text-code-size: 0.875rem;
+  --el-text-code-line-height: 1.429;
+}
+
+[data-el-theme='light'] {
+  color-scheme: light;
+}
+
+[data-el-theme='dark'] {
+  color-scheme: dark;
+}

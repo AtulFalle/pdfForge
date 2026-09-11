@@ -1,0 +1,11 @@
+# Docker/CI frozen installs must not fail because Angular CLI
+# was published less than 24 hours ago (pnpm 11 default).
+minimumReleaseAge: 0
+trustLockfile: true
+
+# Native packages Angular's esbuild pipeline needs to compile.
+allowBuilds:
+  '@parcel/watcher': true
+  esbuild: true
+  lmdb: true
+  msgpackr-extract: true

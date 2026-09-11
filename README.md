@@ -4,16 +4,16 @@ Personal, self-hosted PDF editor for homelab use. Documents stay on your machine
 
 ## Status
 
-**Phase 2:** Axum OpenAPI/Swagger, PDF engine, session API, sanity tests.
+**Phase 3 (web, folder setup):** Angular 22 app, NgElemental theme/widgets, CI, Docker, and an API proxy. No editor features yet.
 
-Phase 3 (Angular UI) is blocked until Phase 2 is reviewed.
+The Rust API from Phase 2 remains the source of PDF work.
 
 ## Layout
 
 ```text
 pdfforge/
 ├── server/              # Rust API + PDF engine (Axum)
-├── web/                 # Angular app — Phase 3
+├── web/                 # Angular 22 app
 ├── docs/PRD.md
 ├── docker/
 ├── compose.yaml
@@ -24,6 +24,8 @@ pdfforge/
 
 Requires a stable Rust toolchain (`rustfmt` and `clippy` components). On Windows, use the MSVC toolchain (`stable-x86_64-pc-windows-msvc`) if the GNU toolchain fails with a missing `dlltool.exe`.
 
+API:
+
 ```bash
 cd server
 cargo test
@@ -32,12 +34,23 @@ cargo run
 
 `cargo run` serves the API on `0.0.0.0:3000`.
 
+Web (Node.js 24+, pnpm). Proxies API paths to `127.0.0.1:3000`:
+
+```bash
+cd web
+pnpm install
+pnpm start
+```
+
 | URL | What |
 | --- | --- |
-| `GET /health` | liveness |
-| `GET /ready` | readiness (temp dir writable) |
-| `http://127.0.0.1:3000/swagger-ui/` | interactive OpenAPI |
-| `GET /api-docs/openapi.json` | OpenAPI document |
+| `http://127.0.0.1:4200/` | Angular placeholder shell |
+| `GET /health` | liveness (proxied) |
+| `GET /ready` | readiness (proxied) |
+| `http://127.0.0.1:4200/swagger-ui/` | interactive OpenAPI (proxied) |
+| `GET /api-docs/openapi.json` | OpenAPI document (proxied) |
+
+Direct API URLs on port 3000 still work.
 
 Upload a PDF to `POST /api/sessions` (`multipart/form-data` field `file`). Mutations send `X-Document-Revision`; a stale value returns **409**.
 
@@ -54,8 +67,10 @@ Compose is the deploy artifact. There is no cloud target.
 
 ```bash
 docker compose up -d --build
-curl http://127.0.0.1:3000/health
+curl http://127.0.0.1:8080/health
 ```
+
+Web listens on **8080** and proxies `/api`, `/health`, `/ready`, `/swagger-ui`, and `/api-docs` to the API. The API remains on **3000** for CLI use.
 
 Optional: set `PDFFORGE_TMP` (Compose already points it at `/tmp/pdfforge`).
 
@@ -72,7 +87,8 @@ GitHub Actions runs on push and pull requests:
 - `cargo fmt --check`
 - `cargo clippy --all-targets --all-features -- -D warnings`
 - `cargo test`
-- `docker compose build api`
+- `pnpm test` and `pnpm run build` in `web/`
+- `docker compose build`
 
 ## Agent skills
 
@@ -81,4 +97,4 @@ Canonical skills for this repo:
 - [skills/rust-pdf-engine/SKILL.md](skills/rust-pdf-engine/SKILL.md)
 - [skills/angular-editor/SKILL.md](skills/angular-editor/SKILL.md)
 
-Cursor also loads them from `.cursor/skills/` and `.cursor/rules/`.
+Cursor also loads them from `.cursor/skills/` and `.cursor/rules/`. UI widgets must come from NgElemental (`src/app/ui/`), not custom HTML.

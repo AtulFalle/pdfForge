@@ -1,0 +1,27 @@
+{
+  "/api": {
+    "target": "http://127.0.0.1:3000",
+    "secure": false,
+    "changeOrigin": true
+  },
+  "/health": {
+    "target": "http://127.0.0.1:3000",
+    "secure": false,
+    "changeOrigin": true
+  },
+  "/ready": {
+    "target": "http://127.0.0.1:3000",
+    "secure": false,
+    "changeOrigin": true
+  },
+  "/swagger-ui": {
+    "target": "http://127.0.0.1:3000",
+    "secure": false,
+    "changeOrigin": true
+  },
+  "/api-docs": {
+    "target": "http://127.0.0.1:3000",
+    "secure": false,
+    "changeOrigin": true
+  }
+}

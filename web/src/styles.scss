@@ -1,0 +1,11 @@
+@use './app/ui/theme/tokens';
+@use './app/ui/theme/typography';
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+  font-family: var(--el-font-sans);
+  background: var(--el-color-surface);
+  color: var(--el-color-on-surface);
+}
