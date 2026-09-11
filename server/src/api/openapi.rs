@@ -3,7 +3,8 @@ use utoipa::OpenApi;
 use super::error::ErrorBody;
 use super::health::{HealthResponse, ReadyResponse};
 use super::sessions::{
-    DeletePagesBody, MutationResponse, ReorderBody, ReplaceBody, RotateBody, SplitBody,
+    DeletePagesBody, DuplicatePageBody, MutationResponse, ReorderBody, ReplaceBody, RotateBody,
+    SplitBody,
 };
 use crate::pdf::{AddText, BBox, DocumentAnalysis, PageInfo, PageRotation, TextRun, TextStyle};
 
@@ -25,6 +26,7 @@ use crate::pdf::{AddText, BBox, DocumentAnalysis, PageInfo, PageRotation, TextRu
         crate::api::sessions::reorder,
         crate::api::sessions::rotate,
         crate::api::sessions::remove_pages,
+        crate::api::sessions::duplicate_page,
         crate::api::sessions::merge_session,
         crate::api::sessions::split_session,
         crate::api::sessions::undo_session,
@@ -39,6 +41,7 @@ use crate::pdf::{AddText, BBox, DocumentAnalysis, PageInfo, PageRotation, TextRu
         ReorderBody,
         RotateBody,
         DeletePagesBody,
+        DuplicatePageBody,
         SplitBody,
         AddText,
         PageRotation,

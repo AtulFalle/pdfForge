@@ -5,15 +5,28 @@
   background: var(--el-color-surface-container-low);
 }
 
+.pdf-viewer__frame {
+  height: 100%;
+  min-height: 0;
+}
+
 .pdf-viewer__scroll {
   height: 100%;
   box-sizing: border-box;
-  padding: var(--el-space-4);
+}
+
+.pdf-viewer__stage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  min-width: 100%;
+  min-height: 100%;
+  padding: var(--el-space-6);
 }
 
 .pdf-viewer__page {
   position: relative;
-  margin-inline: auto;
   background: var(--el-color-surface);
   box-shadow: var(--el-shadow-2);
 }

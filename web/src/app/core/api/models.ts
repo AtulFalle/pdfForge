@@ -52,6 +52,15 @@ export interface AddTextRequest {
   color: string;
 }
 
+export interface PendingAdd {
+  page: number;
+  x: number;
+  y: number;
+  text: string;
+  size: number;
+  color: string;
+}
+
 export interface PageRotation {
   page: number;
   degrees: number;
@@ -63,3 +72,8 @@ export interface ApiErrorBody {
 }
 
 export type EditorTool = 'select' | 'add-text';
+
+export interface ViewportSize {
+  width: number;
+  height: number;
+}

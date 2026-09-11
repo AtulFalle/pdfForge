@@ -3,11 +3,40 @@
   flex-direction: column;
   height: 100%;
   min-height: 0;
-  padding: var(--el-space-3);
 }
 
-.page-panel__list {
+.page-panel {
+  display: flex;
+  flex-direction: column;
   flex: 1;
   min-height: 0;
   height: 100%;
+  padding: var(--el-space-3);
+  gap: var(--el-space-2);
+}
+
+.page-panel__title {
+  flex: 0 0 auto;
+  margin: 0;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--el-color-on-surface-variant);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.page-panel__list {
+  display: block;
+  flex: 1 1 auto;
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
+  height: 0; /* flex item fills remaining space; scroll inside */
+}
+
+.page-panel__items {
+  display: flex;
+  flex-direction: column;
+  gap: var(--el-space-3);
+  padding-block-end: var(--el-space-2);
 }

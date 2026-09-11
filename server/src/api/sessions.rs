@@ -46,6 +46,11 @@ pub struct DeletePagesBody {
 }
 
 #[derive(Debug, Deserialize, ToSchema)]
+pub struct DuplicatePageBody {
+    pub page: u32,
+}
+
+#[derive(Debug, Deserialize, ToSchema)]
 pub struct SplitBody {
     pub pages: Vec<u32>,
 }
@@ -74,6 +79,7 @@ pub fn router() -> Router<AppState> {
         .route("/api/sessions/{id}/pages/reorder", post(reorder))
         .route("/api/sessions/{id}/pages/rotate", post(rotate))
         .route("/api/sessions/{id}/pages/delete", post(remove_pages))
+        .route("/api/sessions/{id}/pages/duplicate", post(duplicate_page))
         .route("/api/sessions/{id}/merge", post(merge_session))
         .route("/api/sessions/{id}/split", post(split_session))
         .route("/api/sessions/{id}/undo", post(undo_session))
@@ -326,6 +332,28 @@ pub(crate) async fn remove_pages(
     let revision = require_revision(&headers)?;
     Ok(Json(mutation(
         &state.sessions.remove_pages(id, revision, &body.pages)?,
+        None,
+    )))
+}
+
+/// Duplicate a page (inserts a copy immediately after the source page).
+#[utoipa::path(
+    post,
+    path = "/api/sessions/{id}/pages/duplicate",
+    tag = "pages",
+    params(("id" = Uuid, Path, description = "Session id")),
+    request_body = DuplicatePageBody,
+    responses((status = 200, body = MutationResponse))
+)]
+pub(crate) async fn duplicate_page(
+    State(state): State<AppState>,
+    Path(id): Path<Uuid>,
+    headers: HeaderMap,
+    Json(body): Json<DuplicatePageBody>,
+) -> Result<Json<MutationResponse>, ApiError> {
+    let revision = require_revision(&headers)?;
+    Ok(Json(mutation(
+        &state.sessions.duplicate(id, revision, body.page)?,
         None,
     )))
 }

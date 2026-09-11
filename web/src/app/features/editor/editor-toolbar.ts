@@ -1,8 +1,16 @@
 import { ChangeDetectionStrategy, Component, inject, output } from '@angular/core';
 import { ElButton } from '../../ui/button/button';
-import { ElMenu, ElMenuItem, ElMenuPanel, ElMenuTrigger } from '../../ui/menu/menu';
+import { ElIcon } from '../../ui/icon/icon';
+import { ElInput, ElInputPrefix } from '../../ui/input/input';
+import { ElList, ElListItem } from '../../ui/list/list';
+import {
+  ElPopover,
+  ElPopoverClose,
+  ElPopoverPanel,
+  ElPopoverTrigger,
+} from '../../ui/popover/popover';
+import { ElScrollArea } from '../../ui/scroll-area/scroll-area';
 import { ElSeparator } from '../../ui/separator/separator';
-import { ElSlider } from '../../ui/slider/slider';
 import { ElStack } from '../../ui/stack/stack';
 import { ElTooltip } from '../../ui/tooltip/tooltip';
 import { EditorStore } from './editor-store';
@@ -12,23 +20,33 @@ import { EditorStore } from './editor-store';
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     ElButton,
-    ElMenu,
-    ElMenuItem,
-    ElMenuPanel,
-    ElMenuTrigger,
+    ElIcon,
+    ElInput,
+    ElInputPrefix,
+    ElList,
+    ElListItem,
+    ElPopover,
+    ElPopoverClose,
+    ElPopoverPanel,
+    ElPopoverTrigger,
+    ElScrollArea,
     ElSeparator,
-    ElSlider,
     ElStack,
     ElTooltip,
   ],
   styleUrl: './editor-toolbar.scss',
   template: `
     <header class="editor-toolbar">
-      <el-stack direction="row" gap="2" align="center">
-        <span class="editor-toolbar__title">{{ store.fileName() }}</span>
+      <el-stack direction="row" gap="2" align="center" class="editor-toolbar__brand">
+        <span class="editor-toolbar__product">PDFForge</span>
+        <el-separator orientation="vertical" />
+        <span class="editor-toolbar__title" [attr.title]="store.fileName()">{{
+          store.fileName()
+        }}</span>
         <el-button
           variant="icon"
-          iconStart="folder-open"
+          iconStart="xmark"
+          size="sm"
           ariaLabel="Close document"
           elTooltip="Close"
           [disabled]="store.busy()"
@@ -36,7 +54,7 @@ import { EditorStore } from './editor-store';
         />
       </el-stack>
 
-      <el-stack direction="row" gap="2" align="center">
+      <el-stack direction="row" gap="2" align="center" class="editor-toolbar__history">
         <el-button
           variant="icon"
           iconStart="rotate-left"
@@ -53,50 +71,76 @@ import { EditorStore } from './editor-store';
           [disabled]="store.busy() || !store.canRedo()"
           (click)="store.redo()"
         />
-        <el-separator orientation="vertical" />
-        <el-button
-          [variant]="store.tool() === 'select' ? 'secondary' : 'icon'"
-          iconStart="arrow-pointer"
-          ariaLabel="Select text"
-          elTooltip="Select"
-          (click)="store.setTool('select')"
-        />
-        <el-button
-          [variant]="store.tool() === 'add-text' ? 'secondary' : 'icon'"
-          iconStart="plus"
-          ariaLabel="Add text"
-          elTooltip="Add text"
-          (click)="store.setTool('add-text')"
-        />
-        <el-separator orientation="vertical" />
-        <el-slider
-          class="editor-toolbar__zoom"
-          [value]="store.zoom()"
-          (valueChange)="store.zoom.set($event)"
-          [min]="50"
-          [max]="200"
-          [step]="10"
-          ariaLabel="Zoom"
-        />
-        <span class="editor-toolbar__zoom-label">{{ store.zoom() }}%</span>
       </el-stack>
 
-      <el-stack direction="row" gap="2" align="center">
-        <el-menu>
-          <el-button elMenuTrigger variant="secondary" iconStart="file-lines" size="sm">
-            Pages
-          </el-button>
-          <el-menu-panel>
-            <el-menu-item icon="arrows-rotate" (selected)="store.rotateSelected()">Rotate 90°</el-menu-item>
-            <el-menu-item icon="arrow-up" (selected)="store.movePage(-1)">Move up</el-menu-item>
-            <el-menu-item icon="arrow-down" (selected)="store.movePage(1)">Move down</el-menu-item>
-            <el-menu-item icon="scissors" (selected)="split.emit()">Split selected</el-menu-item>
-            <el-menu-item icon="file-import" (selected)="merge.emit()">Merge PDF</el-menu-item>
-            <el-menu-item variant="danger" icon="trash" (selected)="deletePages.emit()">
-              Delete pages
-            </el-menu-item>
-          </el-menu-panel>
-        </el-menu>
+      <el-stack direction="row" gap="2" align="center" class="editor-toolbar__actions">
+        <el-popover
+          [open]="store.searchOpen()"
+          (openChange)="store.searchOpen.set($event)"
+          position="bottom"
+          ariaLabel="Search PDF"
+        >
+          <el-button
+            elPopoverTrigger
+            variant="icon"
+            iconStart="magnifying-glass"
+            ariaLabel="Search PDF"
+            elTooltip="Search"
+          />
+          <el-popover-panel class="editor-toolbar__search">
+            <el-stack gap="3">
+              <el-stack direction="row" gap="2" align="center">
+                <el-input
+                  class="editor-toolbar__search-input"
+                  type="search"
+                  placeholder="Search PDF..."
+                  ariaLabel="Search PDF text"
+                  [value]="store.searchQuery()"
+                  (valueChange)="store.searchQuery.set($event)"
+                >
+                  <el-icon elInputPrefix name="magnifying-glass" />
+                </el-input>
+                <el-button
+                  elPopoverClose
+                  variant="icon"
+                  iconStart="xmark"
+                  size="sm"
+                  ariaLabel="Close search"
+                />
+              </el-stack>
+              @if (store.debouncedQuery().trim()) {
+                <p class="editor-toolbar__search-count">
+                  {{ store.searchHits.value().length }} result{{
+                    store.searchHits.value().length === 1 ? '' : 's'
+                  }}
+                </p>
+                <el-scroll-area class="editor-toolbar__hits" ariaLabel="Search results">
+                  <el-list appearance="plain" ariaLabel="Matching text">
+                    @for (hit of store.searchHits.value(); track hit.id) {
+                      <el-list-item
+                        interactive
+                        [selected]="hit.id === store.selectedRunId()"
+                        (activated)="onHit(hit.id)"
+                      >
+                        <span elListTitle>{{ hit.text }}</span>
+                        <span elListDescription>Page {{ hit.page }}</span>
+                      </el-list-item>
+                    }
+                  </el-list>
+                </el-scroll-area>
+              }
+            </el-stack>
+          </el-popover-panel>
+        </el-popover>
+
+        <el-button
+          variant="icon"
+          iconStart="file-import"
+          ariaLabel="Merge PDF"
+          elTooltip="Merge"
+          [disabled]="store.busy()"
+          (click)="merge.emit()"
+        />
         <el-button
           variant="primary"
           iconStart="download"
@@ -112,7 +156,10 @@ import { EditorStore } from './editor-store';
 })
 export class EditorToolbar {
   protected readonly store = inject(EditorStore);
-  readonly split = output<void>();
   readonly merge = output<void>();
-  readonly deletePages = output<void>();
+
+  protected onHit(id: string): void {
+    this.store.selectRun(id);
+    this.store.searchOpen.set(false);
+  }
 }

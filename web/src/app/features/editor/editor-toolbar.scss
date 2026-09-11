@@ -6,26 +6,53 @@
 
 .editor-toolbar {
   display: grid;
-  grid-template-columns: minmax(9rem, max-content) 1fr auto;
+  grid-template-columns: minmax(12rem, 1fr) auto minmax(12rem, 1fr);
   align-items: center;
   gap: var(--el-space-3);
-  padding: var(--el-space-3) var(--el-space-4);
+  padding: var(--el-space-2) var(--el-space-4);
+}
+
+.editor-toolbar__brand {
+  justify-self: start;
+  min-width: 0;
+}
+
+.editor-toolbar__history {
+  justify-self: center;
+}
+
+.editor-toolbar__actions {
+  justify-self: end;
+}
+
+.editor-toolbar__product {
+  font-weight: 700;
+  letter-spacing: 0.01em;
 }
 
 .editor-toolbar__title {
-  max-width: 16rem;
+  max-width: 14rem;
   overflow: hidden;
-  font-weight: 600;
+  color: var(--el-color-on-surface-variant);
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.editor-toolbar__zoom {
-  width: 8rem;
+.editor-toolbar__search {
+  width: min(22rem, 80vw);
 }
 
-.editor-toolbar__zoom-label {
-  min-width: 3rem;
+.editor-toolbar__search-input {
+  flex: 1;
+  min-width: 0;
+}
+
+.editor-toolbar__search-count {
+  margin: 0;
   color: var(--el-color-on-surface-variant);
   font-size: 0.8125rem;
+}
+
+.editor-toolbar__hits {
+  max-height: 14rem;
 }

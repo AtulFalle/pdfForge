@@ -5,8 +5,8 @@ mod fonts;
 mod sample;
 
 pub use editing::{
-    add_text, delete_pages, delete_run, merge_documents, reorder_pages, replace_run, rotate_pages,
-    search_runs, split_document, AddText, PageRotation, ReplaceResult,
+    add_text, delete_pages, delete_run, duplicate_page, merge_documents, reorder_pages,
+    replace_run, rotate_pages, search_runs, split_document, AddText, PageRotation, ReplaceResult,
 };
 pub use errors::PdfError;
 pub use extraction::analyze;

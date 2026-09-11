@@ -6,9 +6,9 @@ use std::time::{Duration, Instant};
 use uuid::Uuid;
 
 use crate::pdf::{
-    add_text, analyze, delete_pages, delete_run, load_pdf, merge_documents, reorder_pages,
-    replace_run, rotate_pages, save_pdf, search_runs, split_document, AddText, DocumentAnalysis,
-    PageRotation, PdfError,
+    add_text, analyze, delete_pages, delete_run, duplicate_page, load_pdf, merge_documents,
+    reorder_pages, replace_run, rotate_pages, save_pdf, search_runs, split_document, AddText,
+    DocumentAnalysis, PageRotation, PdfError,
 };
 
 const IDLE_TTL: Duration = Duration::from_secs(60 * 60);
@@ -144,6 +144,19 @@ impl SessionStore {
     ) -> Result<SessionSnapshot, PdfError> {
         self.mutate(id, revision, |document| {
             delete_pages(document, pages)?;
+            Ok(false)
+        })
+        .map(|(snapshot, _)| snapshot)
+    }
+
+    pub fn duplicate(
+        &self,
+        id: Uuid,
+        revision: u64,
+        page: u32,
+    ) -> Result<SessionSnapshot, PdfError> {
+        self.mutate(id, revision, |document| {
+            duplicate_page(document, page)?;
             Ok(false)
         })
         .map(|(snapshot, _)| snapshot)

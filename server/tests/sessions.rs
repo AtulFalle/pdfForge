@@ -112,4 +112,5 @@ async fn openapi_documents_session_routes() {
     assert!(paths.contains_key("/api/sessions"));
     assert!(paths.contains_key("/api/sessions/{id}/runs/{run_id}"));
     assert!(paths.contains_key("/api/sessions/{id}/pages/reorder"));
+    assert!(paths.contains_key("/api/sessions/{id}/pages/duplicate"));
 }

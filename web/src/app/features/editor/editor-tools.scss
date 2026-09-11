@@ -1,0 +1,21 @@
+:host {
+  display: block;
+  border-top: var(--el-border-width) solid var(--el-color-outline-variant);
+  background: var(--el-color-surface);
+}
+
+.editor-tools {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--el-space-3);
+  padding: var(--el-space-2) var(--el-space-4);
+}
+
+.editor-tools__zoom {
+  min-width: 3.25rem;
+  color: var(--el-color-on-surface-variant);
+  font-size: 0.8125rem;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}

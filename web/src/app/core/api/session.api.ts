@@ -101,6 +101,14 @@ export class SessionApi {
     );
   }
 
+  duplicate(id: string, page: number, revision: number): Observable<MutationResponse> {
+    return this.http.post<MutationResponse>(
+      `/api/sessions/${id}/pages/duplicate`,
+      { page },
+      { headers: this.revisionHeaders(revision) },
+    );
+  }
+
   merge(id: string, file: File, revision: number): Observable<MutationResponse> {
     const body = new FormData();
     body.append('file', file, file.name);

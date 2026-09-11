@@ -7,11 +7,52 @@
 }
 
 .editor-shell__body {
+  display: flex;
   flex: 1;
   min-height: 0;
 }
 
-.editor-shell__panes {
-  height: 100%;
+.editor-shell__pages {
+  display: flex;
+  flex-direction: column;
+  flex: 0 0 9.5rem;
+  width: 9.5rem;
+  min-width: 9.5rem;
+  max-width: 9.5rem;
   min-height: 0;
+  overflow: hidden;
+  border-inline-end: var(--el-border-width) solid var(--el-color-outline-variant);
+  background: var(--el-color-surface);
+}
+
+.editor-shell__workspace {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+}
+
+.editor-shell__edit-field {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 8rem;
+  margin: 0;
+  padding: 0.5rem 0.75rem;
+  border: var(--el-border-width) solid var(--el-color-outline-variant);
+  border-radius: var(--el-radius-xs);
+  background: var(--el-color-surface);
+  color: var(--el-color-on-surface);
+  font-family: var(--el-font-sans);
+  font-size: 0.875rem;
+  line-height: 1.4;
+  resize: vertical;
+}
+
+.editor-shell__edit-field:hover {
+  border-color: var(--el-color-outline);
+}
+
+.editor-shell__edit-field:focus-visible {
+  border-color: var(--el-color-outline);
+  outline: var(--el-border-width-thick) solid var(--el-color-primary);
+  outline-offset: 2px;
 }

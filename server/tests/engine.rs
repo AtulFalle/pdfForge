@@ -1,7 +1,7 @@
 use pdfforge::pdf::{
-    add_text, analyze, delete_pages, delete_run, hello_pdf, load_pdf, merge_documents,
-    reorder_pages, replace_run, rotate_pages, save_pdf, scanned_pdf, search_runs, simple_text_pdf,
-    split_document, two_page_pdf, AddText, PageRotation,
+    add_text, analyze, delete_pages, delete_run, duplicate_page, hello_pdf, load_pdf,
+    merge_documents, reorder_pages, replace_run, rotate_pages, save_pdf, scanned_pdf, search_runs,
+    simple_text_pdf, split_document, two_page_pdf, AddText, PageRotation,
 };
 
 #[test]
@@ -175,6 +175,19 @@ fn delete_pages_and_split_reopen() {
     let analysis = analyze(&reopened, 2).expect("analyze");
     assert_eq!(analysis.pages.len(), 1);
     assert_eq!(analysis.runs[0].text, "Page Two");
+}
+
+#[test]
+fn duplicate_page_inserts_copy_after_source() {
+    let bytes = two_page_pdf().expect("two page");
+    let mut document = load_pdf(&bytes).expect("load");
+    duplicate_page(&mut document, 1).expect("duplicate");
+    let saved = save_pdf(&mut document).expect("save");
+    let reopened = load_pdf(&saved).expect("reopen");
+    let analysis = analyze(&reopened, 2).expect("analyze");
+    assert_eq!(analysis.pages.len(), 3);
+    let texts: Vec<_> = analysis.runs.iter().map(|run| run.text.as_str()).collect();
+    assert_eq!(texts, vec!["Page One", "Page One", "Page Two"]);
 }
 
 #[test]

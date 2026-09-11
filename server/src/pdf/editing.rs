@@ -175,6 +175,31 @@ pub fn delete_pages(document: &mut Document, pages: &[u32]) -> Result<(), PdfErr
     Ok(())
 }
 
+/// Copy `page` and insert the duplicate immediately after it.
+pub fn duplicate_page(document: &mut Document, page: u32) -> Result<(), PdfError> {
+    let source_id = page_id_for(document, page)?;
+    let split_bytes = split_document(document, &[page])?;
+    let extra = super::load_pdf(&split_bytes)?;
+    let dest_pages_id = pages_object_id(document)?;
+    let mut map = HashMap::new();
+    let mut kids = current_kids(document)?;
+    let index = kids
+        .iter()
+        .position(|kid| matches!(kid, Object::Reference(id) if *id == source_id))
+        .ok_or_else(|| PdfError::Invalid(format!("page {page} not found")))?;
+    let extra_pages = extra.get_pages();
+    let mut insert_at = index + 1;
+    for page_id in extra_pages.values().copied() {
+        let copied = copy_object(&extra, document, page_id, &mut map)?;
+        if let Ok(page_dict) = document.get_dictionary_mut(copied) {
+            page_dict.set("Parent", dest_pages_id);
+        }
+        kids.insert(insert_at, Object::Reference(copied));
+        insert_at += 1;
+    }
+    set_page_kids(document, kids)
+}
+
 pub fn merge_documents(base: &mut Document, extra_bytes: &[u8]) -> Result<(), PdfError> {
     let extra = super::load_pdf(extra_bytes)?;
     let dest_pages_id = pages_object_id(base)?;

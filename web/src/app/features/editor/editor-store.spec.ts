@@ -91,4 +91,70 @@ describe('EditorStore', () => {
     expect(store.runs()[0].text).toBe('Hello API');
     expect(store.canUndo()).toBe(true);
   });
+
+  it('duplicates a page through the session API', async () => {
+    const file = new File(['%PDF-1.4'], 'hello.pdf', { type: 'application/pdf' });
+    const opened = store.openDocument(file);
+    await Promise.resolve();
+    http.expectOne('/api/sessions').flush(mutation(), { status: 201, statusText: 'Created' });
+    await Promise.resolve();
+    http
+      .expectOne((request) => request.url.endsWith('/file'))
+      .flush(new Uint8Array([0x25]).buffer);
+    await opened;
+
+    const duplicated = store.duplicatePage(1);
+    await Promise.resolve();
+
+    const request = http.expectOne(
+      '/api/sessions/aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee/pages/duplicate',
+    );
+    expect(request.request.body).toEqual({ page: 1 });
+    expect(request.request.headers.get('X-Document-Revision')).toBe('1');
+    request.flush({
+      ...mutation(),
+      revision: 2,
+      analysis: {
+        revision: 2,
+        pages: [
+          { number: 1, width: 612, height: 792, rotation: 0 },
+          { number: 2, width: 612, height: 792, rotation: 0 },
+        ],
+        runs: mutation().analysis.runs,
+      },
+    });
+    await Promise.resolve();
+    http.expectOne((item) => item.url.endsWith('/file')).flush(new Uint8Array([0x25]).buffer);
+    await duplicated;
+
+    expect(store.revision()).toBe(2);
+    expect(store.pageCount()).toBe(2);
+    expect(store.selectedPage()).toBe(2);
+  });
+
+  it('selects a run without entering edit until beginEditRun', async () => {
+    const file = new File(['%PDF-1.4'], 'hello.pdf', { type: 'application/pdf' });
+    const opened = store.openDocument(file);
+    await Promise.resolve();
+    http.expectOne('/api/sessions').flush(mutation(), { status: 201, statusText: 'Created' });
+    await Promise.resolve();
+    http
+      .expectOne((request) => request.url.endsWith('/file'))
+      .flush(new Uint8Array([0x25]).buffer);
+    await opened;
+
+    expect(store.selectedRunId()).toBeNull();
+    expect(store.editingRunId()).toBeNull();
+
+    store.selectRun('1-0');
+    expect(store.selectedRunId()).toBe('1-0');
+    expect(store.editingRunId()).toBeNull();
+
+    store.beginEditRun('1-0');
+    expect(store.editingRunId()).toBe('1-0');
+
+    store.cancelEditRun();
+    expect(store.editingRunId()).toBeNull();
+    expect(store.selectedRunId()).toBe('1-0');
+  });
 });
