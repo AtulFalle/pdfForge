@@ -31,10 +31,7 @@ impl AppState {
             }),
             Err(error) => Err(std::io::Error::new(
                 error.kind(),
-                format!(
-                    "cannot create session store in {}: {error}",
-                    root.display()
-                ),
+                format!("cannot create session store in {}: {error}", root.display()),
             )),
         }
     }
