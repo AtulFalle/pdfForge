@@ -1,0 +1,26 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "services": {
+    "web": {
+      "framework": "angular",
+      "root": "web/",
+      "installCommand": "pnpm install --frozen-lockfile",
+      "buildCommand": "pnpm run build",
+      "outputDirectory": "dist/web/browser"
+    },
+    "api": {
+      "runtime": "container",
+      "root": "server/",
+      "entrypoint": "Dockerfile.vercel"
+    }
+  },
+  "rewrites": [
+    { "source": "/api/(.*)", "destination": { "service": "api" } },
+    { "source": "/health", "destination": { "service": "api" } },
+    { "source": "/ready", "destination": { "service": "api" } },
+    { "source": "/swagger-ui", "destination": { "service": "api" } },
+    { "source": "/swagger-ui/(.*)", "destination": { "service": "api" } },
+    { "source": "/api-docs/(.*)", "destination": { "service": "api" } },
+    { "source": "/(.*)", "destination": { "service": "web" } }
+  ]
+}

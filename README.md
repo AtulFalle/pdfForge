@@ -61,9 +61,15 @@ cargo run -- analyze path/to/file.pdf
 cargo run -- replace path/to/file.pdf --run-id 1-0 --text "New text" -o out.pdf
 ```
 
+## Vercel
+
+The Angular UI and Rust API deploy as one Vercel project (`vercel.json`). `/api`, `/health`, `/ready`, `/swagger-ui`, and `/api-docs` go to the Axum container; everything else is the static editor.
+
+Session PDFs live on that container's disk. Vercel scales the API to zero after idle time, so open documents do not survive a cold start. Homelab Compose is still the durable self-hosted option.
+
 ## Homelab deploy (CD)
 
-Compose is the deploy artifact. There is no cloud target.
+Compose remains the local/self-hosted deploy artifact.
 
 ```bash
 docker compose up -d --build

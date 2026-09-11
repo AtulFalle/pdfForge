@@ -12,7 +12,7 @@ lopdf = "0.45"
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 thiserror = "2"
-tokio = { version = "1", features = ["macros", "rt-multi-thread", "net", "fs", "io-util", "time"] }
+tokio = { version = "1", features = ["macros", "rt-multi-thread", "net", "fs", "io-util", "time", "signal"] }
 utoipa = { version = "5", features = ["macros", "uuid"] }
 utoipa-swagger-ui = { version = "9", features = ["axum", "reqwest"] }
 uuid = { version = "1", features = ["v4", "serde"] }

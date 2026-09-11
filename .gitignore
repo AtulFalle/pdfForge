@@ -25,6 +25,10 @@ Thumbs.db
 # Docker
 *.log
 
+# Vercel
+.vercel
+
+
 # Session temp (local runs)
 /tmp/
 sessions/

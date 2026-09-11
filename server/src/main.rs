@@ -52,12 +52,47 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 async fn serve(bind: &str) -> Result<(), Box<dyn std::error::Error>> {
     let state = AppState::from_env()?;
-    let addr: SocketAddr = bind.parse()?;
+    let addr = listen_addr(bind)?;
     let listener = tokio::net::TcpListener::bind(addr).await?;
     println!("pdfforge listening on {addr}");
     println!("swagger ui: http://{addr}/swagger-ui/");
-    axum::serve(listener, app_with_state(state)).await?;
+    axum::serve(listener, app_with_state(state))
+        .with_graceful_shutdown(shutdown_signal())
+        .await?;
     Ok(())
+}
+
+fn listen_addr(cli_bind: &str) -> Result<SocketAddr, std::net::AddrParseError> {
+    if let Ok(port) = std::env::var("PORT") {
+        if let Ok(port) = port.parse::<u16>() {
+            return format!("0.0.0.0:{port}").parse();
+        }
+    }
+    cli_bind.parse()
+}
+
+async fn shutdown_signal() {
+    let ctrl_c = async {
+        let _ = tokio::signal::ctrl_c().await;
+    };
+
+    #[cfg(unix)]
+    let terminate = async {
+        match tokio::signal::unix::signal(tokio::signal::unix::SignalKind::terminate()) {
+            Ok(mut signal) => {
+                let _ = signal.recv().await;
+            }
+            Err(_) => std::future::pending::<()>().await,
+        }
+    };
+
+    #[cfg(not(unix))]
+    let terminate = std::future::pending::<()>();
+
+    tokio::select! {
+        () = ctrl_c => {}
+        () = terminate => {}
+    }
 }
 
 fn analyze_file(path: &PathBuf) -> Result<(), Box<dyn std::error::Error>> {
