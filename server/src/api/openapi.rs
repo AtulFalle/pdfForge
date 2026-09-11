@@ -10,6 +10,11 @@ use crate::pdf::{AddText, BBox, DocumentAnalysis, PageInfo, PageRotation, TextRu
 
 #[derive(OpenApi)]
 #[openapi(
+    info(
+        title = "PDFForge API",
+        description = "Session API for content-stream PDF editing. Documents are processed in-session and are never sent to a third-party PDF service.",
+        license(name = "MIT", url = "https://github.com/AtulFalle/pdfForge/blob/master/LICENSE")
+    ),
     paths(
         crate::api::health::health,
         crate::api::health::ready,

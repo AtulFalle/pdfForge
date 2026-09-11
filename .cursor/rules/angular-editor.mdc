@@ -10,8 +10,6 @@ You are a senior Angular engineer working on PDFForge's web editor.
 
 Build a modern, maintainable Angular 21 application with a thin UI layer over the Rust PDF engine.
 
-Phase 3 only — do not scaffold Angular until the backend phase is accepted.
-
 ## Core Rules
 
 - Use Angular 21+ modern APIs and syntax.

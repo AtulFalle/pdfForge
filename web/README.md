@@ -1,6 +1,6 @@
 # web/
 
-Angular 22 PDF editor. It talks to the Rust session API and uses NgElemental widgets in `src/app/ui/`.
+Angular editor for PDFForge. It talks to the Rust session API and uses NgElemental widgets in `src/app/ui/`.
 
 PDF pages render with pdf.js. Text selection and edits use the engine analysis overlay — not a pdf.js text layer and not white-box overlays.
 
@@ -26,7 +26,7 @@ src/app/
 
 Mutations send `X-Document-Revision`. A stale value returns **409**.
 
-## Run locally
+## Run
 
 Needs Node.js 24+ and the API on `127.0.0.1:3000`.
 
@@ -36,7 +36,7 @@ pnpm install
 pnpm start
 ```
 
-`pnpm start` serves the app at `http://127.0.0.1:4200` and proxies `/api`, `/health`, `/ready`, `/swagger-ui`, and `/api-docs` to the Axum API.
+`pnpm start` serves `http://127.0.0.1:4200` and proxies `/api`, `/health`, `/ready`, `/swagger-ui`, and `/api-docs` to the API.
 
 ```bash
 pnpm test

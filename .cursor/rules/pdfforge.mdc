@@ -5,13 +5,11 @@ alwaysApply: true
 
 # PDFForge
 
-Ship in gated phases. Do not start Phase 2 or 3 until the user confirms the current phase.
+PDFForge is a shipping product. Keep the editor and engine production-quality.
 
-- Phase 1: folders, Docker, CI, `GET /health` only
-- Phase 2: Axum OpenAPI, PDF engine, sanity tests — no Angular
-- Phase 3: Angular 21 editor
-
-Do not use Nx. Do not add a database. Do not send PDFs to external services.
+- Do not use Nx
+- Do not add a database
+- Do not send PDFs to external services
 
 Canonical skills:
 

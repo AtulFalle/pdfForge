@@ -52,6 +52,8 @@ async fn openapi_json_is_a_valid_spec() {
             .is_some(),
         "spec must include an openapi version key, got {value}"
     );
+    assert_eq!(value["info"]["title"], "PDFForge API");
+    assert_eq!(value["info"]["license"]["name"], "MIT");
     let paths = value["paths"].as_object().expect("spec must include paths");
     assert!(paths.contains_key("/health"), "spec must document /health");
     assert!(paths.contains_key("/ready"), "spec must document /ready");

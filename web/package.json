@@ -1,6 +1,8 @@
 {
-  "name": "web",
-  "version": "0.0.0",
+  "name": "pdfforge-web",
+  "version": "0.1.0",
+  "description": "PDFForge web editor",
+  "license": "MIT",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",

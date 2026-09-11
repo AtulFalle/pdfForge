@@ -1,14 +1,10 @@
 # PDFForge agent notes
 
-Phased delivery. Do not skip ahead.
-
-1. Phase 1: folders, Docker, CI/CD, health stub
-2. Phase 2: backend, OpenAPI, PDF engine
-3. Phase 3: Angular UI
+PDFForge is a shipping product. Do not regress the editor, engine, or deploy path.
 
 Follow:
 
 - [skills/rust-pdf-engine/SKILL.md](skills/rust-pdf-engine/SKILL.md) for `server/`
 - [skills/angular-editor/SKILL.md](skills/angular-editor/SKILL.md) for `web/`
 
-No Nx. No white-box text overlay. Engine must stay independent of HTTP.
+No Nx. No database. No white-box text overlay. Engine must stay independent of HTTP. Do not send PDFs to external services.

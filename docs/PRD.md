@@ -1,43 +1,39 @@
-# PDFForge — Product Requirements Document
+# PDFForge — Product Requirements
 
-**Status:** Draft
-**Purpose:** Personal, self-hosted PDF editor for homelab use
+**Status:** Shipping
+**Purpose:** Privacy-first PDF editor that changes the document itself — not a box drawn on top of it.
 
 ## 1. Problem
 
-Free online PDF editors are often limited, ad-heavy, or require uploading private documents.
+Free online PDF editors are limited, ad-heavy, or require uploading private documents to someone else's PDF pipeline.
 
-The previous approach only allowed adding textboxes over PDFs. PDFForge should edit the **actual PDF content**, especially existing text, while preserving the document's original appearance.
+Many editors only add textboxes over the page. PDFForge must edit **actual PDF content**, especially existing text, while preserving the document's original appearance.
 
 ## 2. Vision
 
-Build a lightweight, self-hosted PDF editor that can:
+A focused PDF editor that can:
 
 * Edit existing PDF text
 * Preserve original fonts and formatting
-* Add, remove and modify content
-* Manipulate pages and images
-* Fill PDF forms
-* Eventually support handwriting-style document completion
+* Add, remove, and modify content
+* Manipulate pages
+* Export a valid PDF
 
-All PDF processing should remain within the user's infrastructure.
+All PDF processing stays on the PDFForge API host. Nothing is sent to an external PDF-processing service.
 
-## 3. MVP
+## 3. Product
 
-### PDF Editing
+### PDF editing
 
-* Open and render PDFs
+* Open and render PDFs (up to 50 MB)
 * Select existing text
-* Edit existing text
-* Add and delete text
-* Preserve font, size, color, position and formatting where possible
+* Edit, add, and delete text
+* Preserve font, size, color, position, and formatting where possible
 * Search text
 
 ### Pages
 
-* Reorder pages
-* Rotate pages
-* Delete pages
+* Reorder, rotate, duplicate, and delete pages
 * Merge and split PDFs
 
 ### Export
@@ -45,47 +41,40 @@ All PDF processing should remain within the user's infrastructure.
 * Generate valid PDFs
 * Preserve untouched content
 * Maintain document quality
-* Basic undo/redo
+* Undo / redo
 
-### Core Success Criteria
+### Success criterion
 
-> Existing PDF text must be genuinely editable, not simply covered by a new textbox.
+> Existing PDF text must be genuinely editable, not covered by a new textbox.
 
-A real PDF should be editable and exported with the changed text visually matching the original document.
+A real PDF should export with changed text that still looks like the original document.
 
-## 4. Future Scope
+## 4. Later
 
-### Advanced Editing
+### Advanced editing
 
-* Images: add, replace, resize, crop and delete
+* Images: add, replace, resize, crop, and delete
 * Shapes and drawing
 * Advanced typography
 * Find & replace
-* Improved font matching/substitution
+* Improved font matching
 
 ### Forms
 
-* Detect existing form fields
-* Create and edit fields
-* Fill forms
-* Checkboxes and radio buttons
-* Signatures
-* Automatic field detection
+* Detect, create, and fill fields
+* Checkboxes, radio buttons, signatures
 
 ### Handwriting
 
-* Freehand writing
-* Mouse/touch/stylus support
-* Handwriting-style text generation
-* Personal handwriting profiles
-* Automatic placement into form fields
+* Freehand input
+* Mouse / touch / stylus
+* Placement into form fields
 
 ### Scanned PDFs
 
 * OCR
-* Detect text regions
 * Reconstruct editable text
-* Font/style estimation
+* Font / style estimation
 
 ## 5. Architecture
 
@@ -93,105 +82,67 @@ A real PDF should be editable and exported with the changed text visually matchi
 Browser
    │
    ▼
-Angular Web UI
+Angular web editor
    │
    │ HTTP
    ▼
 Rust API
    │
    ▼
-PDF Engine
+PDF engine
 ```
 
-The Angular application handles the editing experience and UI.
+Angular owns the editing experience. Rust owns parsing, analysis, modification, and generation.
 
-Rust handles PDF parsing, analysis, modification and generation.
-
-The PDF engine should remain independent of the UI so it can potentially be reused later as a CLI, WASM module or desktop application.
+The engine stays independent of HTTP so it can run as a CLI, WASM module, or desktop app later.
 
 ## 6. Technology
 
-| Area              | Choice                             |
-| ----------------- | ---------------------------------- |
-| Frontend          | Angular 21                         |
-| Package manager   | pnpm                               |
-| Backend/API       | Rust + Axum                        |
-| PDF processing    | Rust                               |
-| Storage           | Local filesystem / temporary files |
-| Database          | None initially                     |
-| Deployment        | Docker Compose                     |
-| Target            | Homelab                            |
-| Workspace tooling | None                               |
+| Area | Choice |
+| --- | --- |
+| Editor | Angular 22 |
+| Package manager | pnpm |
+| API | Rust + Axum |
+| PDF processing | Rust (`lopdf`) |
+| Storage | Session files on the API host |
+| Database | None |
+| Hosted deploy | Vercel (UI + API container) |
+| Self-host | Docker Compose |
+| Workspace tooling | None (no Nx) |
 
-### Architecture Decision: No Nx
-
-Nx is intentionally **not used**.
-
-The project is small enough that Nx would add unnecessary abstraction and maintenance overhead. Angular CLI and Cargo are sufficient for managing their respective applications.
-
-The initial repository will remain a simple project structure:
+Nx is intentionally not used. Angular CLI and Cargo are enough.
 
 ```text
 pdfforge/
-├── web/                 # Angular application
-├── server/              # Rust API + PDF engine
+├── web/
+├── server/
 ├── docs/
-│   └── PRD.md
 ├── docker/
 ├── compose.yaml
-├── README.md
-└── .gitignore
+└── README.md
 ```
 
-Rust modules/crates will only be separated when the PDF engine's complexity justifies it.
-
-## 7. Privacy & Security
+## 7. Privacy & security
 
 * No external PDF-processing service
-* Documents remain within the homelab
-* Temporary files cleaned after processing
+* No accounts or document cloud
+* Temporary session files, not a durable store
 * Safe handling of malformed PDFs
-* No database or persistent document storage initially
+* See [PRIVACY.md](PRIVACY.md) and [SECURITY.md](../SECURITY.md)
 
-## 8. Non-Goals
+## 8. Non-goals
 
-Initially:
+* Not a multi-tenant SaaS with user accounts
+* Not a collaboration suite
+* Not an AI writing tool
+* Not a clone of every Adobe Acrobat feature
 
-* No SaaS platform
-* No user accounts
-* No cloud storage
-* No collaboration
-* No AI dependency
-* No attempt to reproduce every Adobe Acrobat feature
+## 9. Editing rule
 
-## 9. Development Strategy
-
-**MVP-0 is an engine spike, not the editor UI.**
-
-Work is gated in three phases:
-
-1. Folders, Docker, CI/CD
-2. Backend (OpenAPI, PDF engine, sanity tests)
-3. Angular UI — only after the backend works
-
-First prove:
+Prove this path before expanding the editor:
 
 ```text
-PDF
- ↓
-Parse
- ↓
-Find existing text
- ↓
-Detect font + properties
- ↓
-Replace text
- ↓
-Generate PDF
- ↓
-Verify in standard PDF reader
+PDF → parse → find text → detect font → replace → write PDF → verify in a reader
 ```
-
-Only after reliable text replacement works should we build the full editing interface.
 
 **Forbidden:** covering original text with a white rectangle and drawing new text on top.

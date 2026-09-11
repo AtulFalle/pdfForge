@@ -17,9 +17,14 @@ import { EditorStore } from '../editor/editor-store';
       <el-empty-state
         icon="file-pdf"
         title="PDFForge"
-        description="Open a PDF to edit real content streams — not overlay boxes."
+        description="Edit the PDF itself — real text, original fonts, no overlay boxes."
       >
         <el-stack gap="4">
+          <ul class="document-open__points">
+            <li>Search, select, and replace existing text</li>
+            <li>Rotate, merge, split, and export pages</li>
+            <li>No accounts. No document cloud.</li>
+          </ul>
           @if (store.busy()) {
             <el-progress indeterminate aria-label="Opening PDF" />
           }
@@ -31,7 +36,7 @@ import { EditorStore } from '../editor/editor-store';
             dropTitle="Drop a PDF here"
             browseLabel="Browse PDFs"
           >
-            PDF up to 50 MB. Processing stays on this machine.
+            Up to 50 MB. Processed in your session — never sent to a third-party PDF service.
           </el-file-upload>
         </el-stack>
         <div elEmptyStateActions>

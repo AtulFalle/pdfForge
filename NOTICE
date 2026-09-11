@@ -1,0 +1,34 @@
+PDFForge
+Copyright (c) 2026 Atul Falle
+
+This product is licensed under the MIT License. See LICENSE.
+
+Third-party software included or used at runtime:
+
+Angular
+  Copyright Google LLC
+  License: MIT
+  https://github.com/angular/angular
+
+pdf.js
+  Copyright Mozilla and pdf.js contributors
+  License: Apache License 2.0
+  https://github.com/mozilla/pdf.js
+
+lopdf
+  License: MIT
+  https://github.com/J-F-Liu/lopdf
+
+Font Awesome Free
+  Copyright Fonticons, Inc.
+  Icons: CC BY 4.0
+  Fonts: SIL Open Font License 1.1
+  Code: MIT
+  https://fontawesome.com/license/free
+
+Inter
+  Copyright The Inter Project Authors
+  License: SIL Open Font License 1.1
+  Loaded from Google Fonts in the web editor.
+
+NgElemental widgets vendored in web/src/app/ui/ retain their upstream licenses.

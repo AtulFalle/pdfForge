@@ -6,7 +6,7 @@ use pdfforge::pdf::{analyze, load_pdf, replace_run, save_pdf};
 use pdfforge::{app_with_state, AppState};
 
 #[derive(Parser)]
-#[command(name = "pdfforge", about = "Self-hosted PDF editor API")]
+#[command(name = "pdfforge", about = "PDFForge API — content-stream PDF editor")]
 struct Cli {
     #[command(subcommand)]
     command: Option<Command>,
@@ -54,8 +54,8 @@ async fn serve(bind: &str) -> Result<(), Box<dyn std::error::Error>> {
     let state = AppState::from_env()?;
     let addr = listen_addr(bind)?;
     let listener = tokio::net::TcpListener::bind(addr).await?;
-    println!("pdfforge listening on {addr}");
-    println!("swagger ui: http://{addr}/swagger-ui/");
+    println!("PDFForge listening on {addr}");
+    println!("OpenAPI: http://{addr}/swagger-ui/");
     axum::serve(listener, app_with_state(state))
         .with_graceful_shutdown(shutdown_signal())
         .await?;

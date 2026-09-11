@@ -23,6 +23,7 @@ describe('App', () => {
     const status = compiled.querySelector('[role="status"]');
 
     expect(status?.textContent).toContain('PDFForge');
-    expect(status?.textContent).toContain('Open a PDF to edit real content streams');
+    expect(status?.textContent).toContain('Edit the PDF itself');
+    expect(status?.textContent).toContain('No accounts. No document cloud.');
   });
 });
