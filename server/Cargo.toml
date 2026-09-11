@@ -6,10 +6,16 @@ description = "Self-hosted PDF editor API"
 license = "MIT"
 
 [dependencies]
-axum = "0.8"
+axum = { version = "0.8", features = ["multipart"] }
+clap = { version = "4", features = ["derive"] }
+lopdf = "0.45"
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
-tokio = { version = "1", features = ["macros", "rt-multi-thread", "net"] }
+thiserror = "2"
+tokio = { version = "1", features = ["macros", "rt-multi-thread", "net", "fs", "io-util", "time"] }
+utoipa = { version = "5", features = ["macros", "uuid"] }
+utoipa-swagger-ui = { version = "9", features = ["axum", "reqwest"] }
+uuid = { version = "1", features = ["v4", "serde"] }
 
 [dev-dependencies]
 http-body-util = "0.1"

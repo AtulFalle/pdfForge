@@ -4,15 +4,15 @@ Personal, self-hosted PDF editor for homelab use. Documents stay on your machine
 
 ## Status
 
-**Phase 1:** repository layout, health API stub, Docker Compose, CI.
+**Phase 2:** Axum OpenAPI/Swagger, PDF engine, session API, sanity tests.
 
-Phase 2 (backend / PDF engine) and Phase 3 (Angular UI) are blocked until each previous phase is reviewed.
+Phase 3 (Angular UI) is blocked until Phase 2 is reviewed.
 
 ## Layout
 
 ```text
 pdfforge/
-├── server/              # Rust API (Axum)
+├── server/              # Rust API + PDF engine (Axum)
 ├── web/                 # Angular app — Phase 3
 ├── docs/PRD.md
 ├── docker/
@@ -30,13 +30,23 @@ cargo test
 cargo run
 ```
 
-Health check:
+`cargo run` serves the API on `0.0.0.0:3000`.
+
+| URL | What |
+| --- | --- |
+| `GET /health` | liveness |
+| `GET /ready` | readiness (temp dir writable) |
+| `http://127.0.0.1:3000/swagger-ui/` | interactive OpenAPI |
+| `GET /api-docs/openapi.json` | OpenAPI document |
+
+Upload a PDF to `POST /api/sessions` (`multipart/form-data` field `file`). Mutations send `X-Document-Revision`; a stale value returns **409**.
+
+CLI (no UI required):
 
 ```bash
-curl http://127.0.0.1:3000/health
+cargo run -- analyze path/to/file.pdf
+cargo run -- replace path/to/file.pdf --run-id 1-0 --text "New text" -o out.pdf
 ```
-
-Expected: `{"status":"ok"}`
 
 ## Homelab deploy (CD)
 
@@ -46,6 +56,8 @@ Compose is the deploy artifact. There is no cloud target.
 docker compose up -d --build
 curl http://127.0.0.1:3000/health
 ```
+
+Optional: set `PDFFORGE_TMP` (Compose already points it at `/tmp/pdfforge`).
 
 Stop:
 
